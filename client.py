@@ -43,6 +43,8 @@ def message(member, before, after):
         res = f'{user_name}さんが{after_channel}に入室しました'
     elif after_channel is None:
         res = f'{user_name}さんが{before_channel}から退室しました'
+    elif before_channel != after_channel:
+        res = f'{user_name}さんが{before_channel}から{after_channel}へ移動しました'
     else:
         res = None
     return res
