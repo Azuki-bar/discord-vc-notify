@@ -26,10 +26,15 @@ class GetID:
 
 
 def detect_voice_diff(before_voice_status, after_voice_status):
-    if before_voice_status.channel is None and after_voice_status.channel is not None:
+    before_channel = before_voice_status.channel
+    after_channel = after_voice_status.channel
+
+    if before_channel is None and after_channel is not None:
         return 'in'
-    elif before_voice_status.channel is not None and after_voice_status.channel is None:
+    elif before_channel is not None and after_channel is None:
         return 'out'
+    elif before_channel != after_channel:
+        return 'moved'
     else:
         return None
 
