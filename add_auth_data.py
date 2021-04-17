@@ -1,5 +1,6 @@
 import os
 import json
+import getpass
 
 
 def add_auth(file_path='./.auth_file.json', service='discord'):
@@ -10,7 +11,7 @@ def add_auth(file_path='./.auth_file.json', service='discord'):
 
     print(f'{service}の認証情報を保存します。')
     channel_id = int(input("Channel ID >>> "))
-    access_token = input("access_token >>> ")
+    access_token = getpass.getpass("access_token >>> ")
     json_data = dict([(service, None)])
     json_data[service] = {
         "channel_id": channel_id,
@@ -18,6 +19,8 @@ def add_auth(file_path='./.auth_file.json', service='discord'):
     }
     with open(file_path, 'w') as f:
         json.dump(json_data, f, indent=2)
+
+    print("正常に登録されました")
 
 
 if __name__ == '__main__':
