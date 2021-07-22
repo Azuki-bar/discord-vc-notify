@@ -4,9 +4,24 @@ import sys
 import time
 import json
 
+TOKEN_ENV_VAL = 'TOKEN'
+CHANNEL_ID_ENV_VAL = 'CHANNEL_ID'
 
-class GetID:
+
+class GetId:
+    def __init__(self):
+        pass
+
+    def channel_id(self):
+        pass
+
+    def access_token(self):
+        pass
+
+
+class GetIdJson(GetId):
     def __init__(self, json_data_path, service='discord'):
+        super(GetIdJson, self).__init__()
         self.service = service
         self.json_data = self.get_json(json_data_path)
 
@@ -23,6 +38,18 @@ class GetID:
 
     def access_token(self):
         return self.json_data['access_token']
+
+
+class GetIdEnvVals(GetId):
+    def __init__(self):
+        super(GetIdEnvVals, self).__init__()
+        pass
+
+    def channel_id(self):
+        return os.environ[CHANNEL_ID_ENV_VAL]
+
+    def access_token(self):
+        return os.environ[TOKEN_ENV_VAL]
 
 
 def detect_voice_diff(before_voice_status, after_voice_status):
@@ -60,7 +87,11 @@ if __name__ == '__main__':
     if "HTTP_PROXY" in os.environ:
         proxy = os.environ["HTTP_PROXY"]
     client = discord.Client(proxy=proxy)
-    discord_auth = GetID('./.auth_file.json')
+    discord_auth = None
+    if TOKEN_ENV_VAL in os.environ and CHANNEL_ID_ENV_VAL in os.environ:
+        discord_auth = GetIdEnvVals()
+    else:
+        discord_auth = GetIdJson('./.auth_file.json')
     channel_id = discord_auth.channel_id()
 
 
