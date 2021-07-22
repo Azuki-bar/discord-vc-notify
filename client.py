@@ -88,7 +88,7 @@ if __name__ == '__main__':
         proxy = os.environ["HTTP_PROXY"]
     client = discord.Client(proxy=proxy)
     discord_auth = None
-    if "TOKEN" in os.environ and "CHANNEL_ID" is os.environ:
+    if TOKEN_ENV_VAL in os.environ and CHANNEL_ID_ENV_VAL in os.environ:
         discord_auth = GetIdEnvVals()
     else:
         discord_auth = GetIdJson('./.auth_file.json')
