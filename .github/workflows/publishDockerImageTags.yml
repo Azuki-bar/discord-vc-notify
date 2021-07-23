@@ -29,7 +29,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - 
         name: Detect Tags
-        run: VERSION=$(echo ${{ github.ref }} | sed -e "s#refs/tags/##g")
+        run: echo ${{ github.ref }} | sed -e "s#refs/tags/v\(.*\)#VERSION=\1#g" >> $GITHUB_ENV
       -
         name: Login to GitHub Container Registry
         uses: docker/login-action@v1 
@@ -45,7 +45,7 @@ jobs:
           file: ./Dockerfile
           platforms: linux/amd64, linux/arm64, linux/arm/v7
           push: true
-          tags: azukibar/discord-vc-notify:${{env.version}}
+          tags: azukibar/discord-vc-notify:${{env.VERSION}}
       -
         name: Build and push to GitHub Container Registry
         uses: docker/build-push-action@v2
@@ -54,5 +54,5 @@ jobs:
           file: ./Dockerfile
           platforms: linux/amd64, linux/arm64, linux/arm/v7
           push: true
-          tags: ghcr.io/azuki-bar/discord-vc-notify:${{env.version}}
+          tags: ghcr.io/azuki-bar/discord-vc-notify:${{env.VERSION}}
 
