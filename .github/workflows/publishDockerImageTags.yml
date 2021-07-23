@@ -3,7 +3,8 @@ name: publish_docker_image_with_tags
 
 on:
   push:
-    tags: 
+    tags:
+      - "v*"
 
 jobs:
   docker:
