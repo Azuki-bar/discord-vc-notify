@@ -3,7 +3,7 @@
 このスクリプトはdiscordのボイスチャットに入退室したときに指定されたチャンネルに通知を
 送信するものです。
 
-この Bot に関して書いたブログ [https://www.azukibar.dev/blog/discord-vc/](https://www.azukibar.dev/blog/discord-vc/) も参考にしてください。
+この Bot に関して書いたブログ [https://azukibar.dev/blog/discord-vc/](https://azukibar.dev/blog/discord-vc/) も参考にしてください。
 
 ## Docker を使用する
 
