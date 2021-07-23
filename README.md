@@ -45,6 +45,6 @@ services:
 任意のサーバで動かしてください。
 
 ## publish status
-![docker hub](https://github.com/Azuki-bar/discord-vc-notify/actions/workflows/uploadDockerHub.yaml/badge.svg)
+![latest release](https://github.com/Azuki-bar/discord-vc-notify/actions/workflows/publishDockerImageLatest.yml/badge.svg)
 
-![GitHub Container Registory](https://github.com/Azuki-bar/discord-vc-notify/actions/workflows/uploadGhcrio.yml/badge.svg)
+![GitHub Container Registory](https://github.com/Azuki-bar/discord-vc-notify/actions/workflows/publishDockerImageTags.yml/badge.svg)
