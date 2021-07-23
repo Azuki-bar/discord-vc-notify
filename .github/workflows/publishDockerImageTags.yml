@@ -8,12 +8,13 @@ on:
 
 jobs:
   docker:
+    env: 
+      VERSION: 0
     runs-on: ubuntu-latest
     steps:
       -
         name: Check Out Repo 
         uses: actions/checkout@v2
-
       -
         name: Set up QEMU
         uses: docker/setup-qemu-action@v1
@@ -26,6 +27,9 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - 
+        name: Detect Tags
+        run: VERSION=$(echo ${{ github.ref }} | sed -e "s#refs/tags/##g")
       -
         name: Login to GitHub Container Registry
         uses: docker/login-action@v1 
@@ -41,7 +45,7 @@ jobs:
           file: ./Dockerfile
           platforms: linux/amd64, linux/arm64, linux/arm/v7
           push: true
-          tags: azukibar/discord-vc-notify:${github.ref##*/}
+          tags: azukibar/discord-vc-notify:${{env.version}}
       -
         name: Build and push to GitHub Container Registry
         uses: docker/build-push-action@v2
@@ -50,5 +54,5 @@ jobs:
           file: ./Dockerfile
           platforms: linux/amd64, linux/arm64, linux/arm/v7
           push: true
-          tags: ghcr.io/azuki-bar/discord-vc-notify:${github.ref##*/}
+          tags: ghcr.io/azuki-bar/discord-vc-notify:${{env.version}}
 
