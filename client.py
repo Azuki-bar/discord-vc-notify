@@ -8,6 +8,10 @@ TOKEN_ENV_VAL = 'TOKEN'
 CHANNEL_ID_ENV_VAL = 'CHANNEL_ID'
 
 
+class ChannelNotFoundError(Exception):
+    pass
+
+
 class GetId:
     def __init__(self):
         pass
@@ -46,7 +50,10 @@ class GetIdEnvVals(GetId):
         pass
 
     def channel_id(self):
-        return os.environ[CHANNEL_ID_ENV_VAL]
+        try:
+            return int(os.environ[CHANNEL_ID_ENV_VAL])
+        except ValueError:
+            exit("please check your Channel ID")
 
     def access_token(self):
         return os.environ[TOKEN_ENV_VAL]
@@ -94,11 +101,9 @@ if __name__ == '__main__':
         discord_auth = GetIdJson('./.auth_file.json')
     channel_id = discord_auth.channel_id()
 
-
     @client.event
     async def on_ready():
         print("login success")
-
 
     @client.event
     async def on_voice_state_update(member, before, after):
@@ -108,7 +113,9 @@ if __name__ == '__main__':
         voice_status = detect_voice_diff(before, after)
         if voice_status is not None:
             res = message(member, before, after)
-            await client.get_channel(channel_id).send(res)
-
+            channel = client.get_channel(channel_id)
+            if (channel is None):
+                raise ChannelNotFoundError
+            await channel.send(res)
 
     client.run(discord_auth.access_token())
