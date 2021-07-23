@@ -7,6 +7,19 @@
 
 ## Docker を使用する
 
+## ダウンロード先
+
+このリポジトリから作成されたDockerイメージはGitHub Container Registry とDocker Hubにアップロードされています。
+
+ダウンロードは以下のどちらかでお願いします。
+
+```
+docker pull ghcr.io/azuki-bar/discord-vc-notify
+# or
+docker pull azukibar/discord-vc-notify
+```
+
+
 ### docker compose を使用する
 
 以下の`docker-compose.yml`を好きな場所に置いてください。
