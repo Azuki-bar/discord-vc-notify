@@ -25,3 +25,8 @@
 この時、チャンネルIDとアクセストークンが必要です。
 
 任意のサーバで動かしてください。
+
+## publish status
+![docker hub](https://github.com/Azuki-bar/discord-vc-notify/actions/workflows/uploadDockerHub.yaml/badge.svg)
+
+![GitHub Container Registory](https://github.com/Azuki-bar/discord-vc-notify/actions/workflows/uploadGhcrio.yml/badge.svg)
