@@ -7,6 +7,6 @@ WORKDIR /app
 COPY client.py add_auth_data.py /app/
 COPY Pipfile Pipfile.lock /app/
 
-RUN pip install pipenv && pipenv install
+RUN pip install pipenv && pipenv install --system
 
 CMD pipenv run python client.py
