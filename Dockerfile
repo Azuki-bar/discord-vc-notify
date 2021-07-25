@@ -4,7 +4,7 @@ ENV PYTHONUNBUFFERED 1
 
 WORKDIR /app
 
-COPY client.py add_auth_data.py /app/
+COPY code/client.py code/add_auth_data.py /app/
 COPY Pipfile Pipfile.lock /app/
 
 RUN pip install pipenv && pipenv install --system
