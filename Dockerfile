@@ -10,6 +10,8 @@ COPY Pipfile Pipfile.lock /app/
 RUN apt-get update \
  && apt-get install -y --no-install-recommends \
     gcc \
+    linux-libc-dev \
+    libc6-dev \
  && apt-get -y clean \
  && rm -rf /var/lib/apt/lists/*
 RUN pip install pipenv && pipenv install --system
