@@ -1,6 +1,7 @@
 FROM python:3.9.6-slim-buster
 
 ENV PYTHONUNBUFFERED 1
+ENV DEBIAN_FRONTEND noninteractive
 
 WORKDIR /app
 
