@@ -1,0 +1,13 @@
+name: unit test
+
+on:
+  push
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Python Unit Test
+        runs:
+          using: docker
+          image: './Dockerfiles/test_Dockerfile'

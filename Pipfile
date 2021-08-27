@@ -13,3 +13,7 @@ pytest-mock = "*"
 
 [requires]
 python_version = "3.9"
+
+[scripts]
+start = "python client.py"
+test = "pytest"
