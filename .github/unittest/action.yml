@@ -4,4 +4,4 @@ name: unit test
 description: run unit test
 runs:
   using: docker
-  image: './Dockerfiles/test_Dockerfile'
+  image: '../../Dockerfiles/test_Dockerfile'
