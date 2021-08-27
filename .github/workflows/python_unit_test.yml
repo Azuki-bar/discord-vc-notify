@@ -9,6 +9,6 @@ jobs:
     name: 'Unit Test'
     steps:
       - name: Python Unit Test
-        runs:
+        run:
           using: docker
           image: './Dockerfiles/test_Dockerfile'
