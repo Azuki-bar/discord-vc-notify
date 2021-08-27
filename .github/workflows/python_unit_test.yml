@@ -8,4 +8,8 @@ jobs:
     runs-on: ubuntu-latest
     name: 'Unit Test'
     steps:
-      - uses: ./.github/actions/unittest.yml
+      - name: Check Out Repo
+        uses: actions/checkout@v2
+
+      - name: run unit test container
+        uses: ./.github/actions/unittest.yml
