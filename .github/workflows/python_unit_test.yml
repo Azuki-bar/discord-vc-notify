@@ -4,8 +4,9 @@ on:
   push
 
 jobs:
-  docker:
+  unittest:
     runs-on: ubuntu-latest
+    name: 'Unit Test'
     steps:
       - name: Python Unit Test
         runs:
