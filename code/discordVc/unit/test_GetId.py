@@ -60,7 +60,7 @@ class TestGetIdEnvVals(unittest.TestCase):
         self.assertEqual(self.channel_id, self.get_id_env_vals.channel_id)
 
     def test_check_env_vals(self):
-        self.assertFalse(self.get_id_env_vals.check_env_vals())
+        self.assertTrue(self.get_id_env_vals.check_env_vals())
         os.environ.pop(self.get_id_env_vals.TOKEN_ENV_VAL, None)
         self.assertFalse(self.get_id_env_vals.check_env_vals())
 
