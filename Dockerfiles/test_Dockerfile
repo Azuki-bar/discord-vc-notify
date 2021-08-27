@@ -12,8 +12,8 @@ RUN apt-get update \
     libc6-dev \
  && apt-get -y clean \
  && rm -rf /var/lib/apt/lists/*
-COPY ../code/ /app/
-COPY ../Pipfile Pipfile.lock /app/
-RUN pip install pipenv && pipenv install --system --dev
+COPY code/ /app/
+COPY Pipfile Pipfile.lock /app/
+RUN pip install pipenv && pipenv install --system --dev -v
 
 CMD pytest
