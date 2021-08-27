@@ -37,7 +37,7 @@ class DiscordVc(DetectVoiceState):
         self._message = res
 
     @property
-    def channel(self) -> Type[discord.Guild.channels]:
+    def channel(self):
         return self._channel
 
     @channel.setter
@@ -75,4 +75,4 @@ class DiscordVc(DetectVoiceState):
         self.voice_channel_diff()
         if self._channel_status is not None:
             self._retrieve_message()
-            await self.channel.send(self.message)
+            self.channel.send(self.message)

@@ -1,4 +1,4 @@
-from . import VoiceState
+from .VoiceState import VoiceState
 
 
 class DetectVoiceState(VoiceState):
