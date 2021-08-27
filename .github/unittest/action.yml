@@ -1,8 +1,7 @@
 name: unit test
 
-on:
-  push
 
+description: run unit test
 runs:
   using: docker
   image: './Dockerfiles/test_Dockerfile'
