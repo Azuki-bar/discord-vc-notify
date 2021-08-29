@@ -1,5 +1,5 @@
 import unittest
-from unittest.mock import Mock, MagicMock, patch
+from unittest.mock import MagicMock
 from ..DiscordVc import DiscordVc
 import pytest
 import discord
@@ -86,7 +86,7 @@ class TestDiscordVc(unittest.TestCase):
         self.discord_vc._after.channel = None
         self.discord_vc.send_message()
 
-        # self.discord_vc._channel.send.assert_called_with(3)
+        assert self.discord_vc._channel.send.call_count == 3
 
 
 if __name__ == '__main__':
