@@ -16,16 +16,16 @@ class DiscordVc(DetectVoiceState):
 
     @member.setter
     def member(self, value):
-        if isinstance(value, discord.Member) or value is None:
+        if isinstance(value, (discord.Member, type(None))):
             self._member = value
         else:
-            raise TypeError
+            raise TypeError("value type is", type(value))
 
     def _retrieve_message(self):
         user_name = self._member.display_name
-        before_channel = self.before.channel
-        after_channel = self.after.channel
-
+        before_channel = self._before.channel
+        after_channel = self._after.channel
+        # return (user_name, before_channel, after_channel)
         if before_channel is None:
             res = f'{user_name}さんが{after_channel}に入室しました'
         elif after_channel is None:
@@ -60,19 +60,8 @@ class DiscordVc(DetectVoiceState):
         else:
             raise TypeError
 
-    @property
-    def member(self) -> Type[discord.Member]:
-        return self._member
-
-    @member.setter
-    def member(self, member):
-        if isinstance(member, discord.Member):
-            self._member = member
-        else:
-            raise TypeError
-
     def send_message(self):
         self.voice_channel_diff()
         if self._channel_status is not None:
             self._retrieve_message()
-            self.channel.send(self.message)
+            self._channel.send(self.message)

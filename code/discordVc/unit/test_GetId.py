@@ -30,6 +30,7 @@ class TestGetIdJson(unittest.TestCase):
         self.assertEqual(self.access_token, self.GetIdJson.access_token)
 
     def test_get_json(self):
+        mock = pytest_mock.mocker
         with self.assertRaises(FileNotFoundError):
             self.GetIdJson.get_json("")
 
