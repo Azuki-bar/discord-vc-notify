@@ -73,19 +73,21 @@ class TestDiscordVc(unittest.TestCase):
         self.discord_vc._before.channel = None
         self.discord_vc._after.channel = after_channel
         self.discord_vc.send_message()
+        assert self.discord_vc._channel.send.call_count == 1
 
         self.discord_vc._before.channel = before_channel
         self.discord_vc._after.channel = None
         self.discord_vc.send_message()
+        assert self.discord_vc._channel.send.call_count == 2
 
         self.discord_vc._before.channel = before_channel
         self.discord_vc._after.channel = after_channel
         self.discord_vc.send_message()
+        assert self.discord_vc._channel.send.call_count == 3
 
         self.discord_vc._before.channel = None
         self.discord_vc._after.channel = None
         self.discord_vc.send_message()
-
         assert self.discord_vc._channel.send.call_count == 3
 
 
