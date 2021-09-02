@@ -17,9 +17,28 @@ jobs:
         uses: actions/checkout@v2
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
-
+  retrieve-meta:
+    runs-on: ubuntu-latest
+    steps:
+      - name: get tag
+        uses: docker/metadata-action
+        with:
+          images: azukibar/discord-vc-notify
+          tags: |
+            type=sha
+  retrieve-meta-ghcr:
+    runs-on: ubuntu-latest
+    steps:
+      - name: get tag
+        uses: docker/metadata-action
+        with:
+          images: ghcr.io/${{ github.repository }}
+          tags: |
+            type=sha
   docker-hub-amd64:
-    needs: docker-init
+    needs:
+      - docker-init
+      - retrieve-meta
     runs-on: ubuntu-latest
     steps:
       - name: Check Out Repo
@@ -36,10 +55,12 @@ jobs:
           file: ./Dockerfiles/test_Dockerfile
           platforms: linux/amd64
           push: true
-          tags: azukibar/discord-vc-notify:dev
+          tags: ${{jobs.retrieve-meta.outputs.images}}
 
   docker-hub-arm64:
-    needs: docker-init
+    needs:
+      - docker-init
+      - retrieve-meta
     runs-on: ubuntu-latest
     steps:
       - name: Check Out Repo
@@ -56,12 +77,13 @@ jobs:
         with:
           context: ./
           file: ./Dockerfiles/test_Dockerfile
-          platforms: linux/arm64, linux/arm/v7
-          push: true
-          tags: azukibar/discord-vc-notify:dev
+          platforms: linux/arm64
+          tags: ${{jobs.retrieve-meta.outputs.images}}
 
   docker-hub-armv7:
-    needs: docker-init
+    needs:
+      - docker-init
+      - retrieve-meta
     runs-on: ubuntu-latest
     steps:
       - name: Check Out Repo
@@ -79,11 +101,12 @@ jobs:
           context: ./
           file: ./Dockerfiles/test_Dockerfile
           platforms: linux/arm/v7
-          push: true
-          tags: azukibar/discord-vc-notify:dev
+          tags: ${{jobs.retrieve-meta.outputs.images}}
 
   ghcr-amd64:
-    needs: docker-init
+    needs:
+      - docker-init
+      - retrieve-meta-ghcr
     runs-on: ubuntu-latest
     steps:
       - name: Check Out Repo
@@ -101,10 +124,13 @@ jobs:
           file: ./Dockerfiles/test_Dockerfile
           platforms: linux/amd64
           push: true
-          tags: ghcr.io/${{ github.repository }}:dev
+          tags: ${{ jobs.retrieve-meta-ghcr.outputs.tags }}
+          labels: ${{jobs.retrieve-meta-ghcr.outputs.labels}}
 
   ghcr-arm64:
-    needs: docker-init
+    needs:
+      - docker-init
+      - retrieve-meta-ghcr
     runs-on: ubuntu-latest
     steps:
       - name: Check Out Repo
@@ -124,10 +150,12 @@ jobs:
           file: ./Dockerfiles/test_Dockerfile
           platforms: linux/arm64
           push: true
-          tags: ghcr.io/${{ github.repository }}:dev
+          tags: ${{ jobs.retrieve-meta-ghcr.outputs.tags }}
 
   ghcr-armv7:
-    needs: docker-init
+    needs:
+      - docker-init
+      - retrieve-meta-ghcr
     runs-on: ubuntu-latest
     steps:
       - name: Check Out Repo
@@ -147,4 +175,4 @@ jobs:
           file: ./Dockerfiles/test_Dockerfile
           platforms: linux/arm/v7
           push: true
-          tags: ghcr.io/${{ github.repository }}:dev
+          tags: ${{ jobs.retrieve-meta-ghcr.outputs.tags }}
