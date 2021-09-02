@@ -2,12 +2,15 @@
 name: publish_docker_image_dev
 
 on:
-  push:
+  pull_request:
     paths:
       - '.github/workflows/**'
       - 'codes/**'
       - 'Dockerfiles/**'
       - '**/Pipfile*'
+    types:
+      - synchronize
+      - opened
 
 jobs:
   docker-init:
@@ -194,3 +197,30 @@ jobs:
           platforms: linux/arm/v7
           push: true
           tags: ${{steps.tag.outputs.tags}}
+  comment:
+    runs-on: ubuntu-latest
+    needs:
+      - docker-hub-amd64
+      - docker-hub-arm64
+      - docker-hub-armv7
+      - ghcr-amd64
+      - ghcr-arm64
+      - ghcr-armv7
+    steps:
+      - name: get tag
+        id: tag
+        uses: docker/metadata-action@v3
+        with:
+          images: ghcr.io/${{ github.repository }}
+          tags: |
+            type=sha
+      - name: comment docker container tag
+        uses: actions/github-script@v4
+        with:
+          script: |
+            github.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: 'Get container images from \n${{steps.tag.outputs.tags}}'
+            })
