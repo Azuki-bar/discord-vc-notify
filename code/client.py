@@ -9,10 +9,10 @@ if __name__ == '__main__':
     client = discord.Client(proxy=proxy)
 
     discord_auth = discordVc.GetIdEnvVals()
-    if discord_auth.check_env_vals():
+    if not discord_auth.check_env_vals():
         discord_auth = discordVc.GetIdJson('./.auth_file.json')
 
-    discord_vc = discordVc.DiscordVc(discord_auth.channel_id)
+    discord_vc = discordVc.DiscordVc(client, discord_auth.channel_id)
 
 
     @client.event

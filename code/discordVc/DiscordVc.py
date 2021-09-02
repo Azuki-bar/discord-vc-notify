@@ -1,17 +1,22 @@
 from . import DetectVoiceState, ChannelNotFoundError
 import discord
 from typing import Type
+import logging
+
+logging.basicConfig(level=logging.WARNING)
 
 
 class DiscordVc(DetectVoiceState):
-    def __init__(self, channel):
+    def __init__(self, client: discord.Client, channel_id: int):
         super(DiscordVc, self).__init__()
         self._member = None
         self._message = None
-        self._channel = channel
+        self._channel_id = channel_id
+        self._channel = None
+        self._client = client
 
     @property
-    def member(self):
+    def member(self) -> Type[discord.Member]:
         return self._member
 
     @member.setter
@@ -37,31 +42,44 @@ class DiscordVc(DetectVoiceState):
         self._message = res
 
     @property
-    def channel(self):
-        return self._channel
+    def channel_id(self) -> int:
+        return self._channel_id
 
-    @channel.setter
-    def channel(self, value):
-        if isinstance(value, discord.ChannelType):
-            self._channel = value
+    @channel_id.setter
+    def channel_id(self, value):
+        if isinstance(value, int):
+            self._channel_id = value
         elif value is None:
             raise ChannelNotFoundError
         else:
             raise TypeError
 
     @property
-    def message(self) -> Type[str]:
+    def content(self) -> Type[str]:
         return self._message
 
-    @message.setter
-    def message(self, value):
+    @content.setter
+    def content(self, value):
         if isinstance(value, str) or value is None:
             self._message = value
         else:
             raise TypeError
 
-    def send_message(self):
+    @property
+    def channel(self):
+        if self._channel is None:
+            self._channel = self._client.get_channel(self._channel_id)
+        return self._channel
+
+    @channel.setter
+    def channel(self, value):
+        if isinstance(value, discord.ChannelType):
+            self._channel = value
+        else:
+            raise TypeError
+
+    async def send_message(self):
         self.voice_channel_diff()
         if self._channel_status is not None:
             self._retrieve_message()
-            self._channel.send(self.message)
+            await self.channel.send(self.content)

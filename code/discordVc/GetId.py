@@ -36,7 +36,7 @@ class GetIdJson(GetId):
     def __init__(self, service='discord'):
         super(GetIdJson, self).__init__()
         self.service = service
-        self.json_data = None
+        self._json_data = None
 
     def get_json(self, json_file):
         if not os.path.exists(json_file):
@@ -47,12 +47,18 @@ class GetIdJson(GetId):
         return raw_json[self.service]
 
     def fetch_json_file(self, json_file_path):
-        self.json_data = self.get_json(json_file_path)
+        self._json_data = self.get_json(json_file_path)
 
     @property
     def channel_id(self):
-        return int(self.json_data[self.service]['channel_id'])
+        if self._json_data is None:
+            raise ValueError("Please call self.fetch_json_file before")
+
+        return int(self._json_data[self.service]['channel_id'])
 
     @property
     def access_token(self):
-        return self.json_data[self.service]['access_token']
+        if self._json_data is None:
+            raise ValueError("Please call self.fetch_json_file before")
+
+        return self._json_data[self.service]['access_token']

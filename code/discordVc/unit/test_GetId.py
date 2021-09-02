@@ -12,7 +12,7 @@ class TestGetIdJson(unittest.TestCase):
         self.access_token = "AAA"
 
         self.GetIdJson = GetIdJson(service=self.service)
-        self.GetIdJson.json_data = {
+        self.GetIdJson._json_data = {
             self.service: {
                 "channel_id": self.channel_id,
                 "access_token": self.access_token

@@ -62,7 +62,7 @@ class TestDiscordVc(unittest.TestCase):
         assert self.discord_vc._message is None
 
     def test_send_message(self):
-        self.discord_vc._channel.send = MagicMock(
+        self.discord_vc._channel_id.send = MagicMock(
             name='discord.TextChannel.send')
         self.discord_vc._member = MagicMock(discord.Member)
         self.discord_vc._before = MagicMock(discord.VoiceState)
@@ -73,22 +73,22 @@ class TestDiscordVc(unittest.TestCase):
         self.discord_vc._before.channel = None
         self.discord_vc._after.channel = after_channel
         self.discord_vc.send_message()
-        assert self.discord_vc._channel.send.call_count == 1
+        assert self.discord_vc._channel_id.send.call_count == 1
 
         self.discord_vc._before.channel = before_channel
         self.discord_vc._after.channel = None
         self.discord_vc.send_message()
-        assert self.discord_vc._channel.send.call_count == 2
+        assert self.discord_vc._channel_id.send.call_count == 2
 
         self.discord_vc._before.channel = before_channel
         self.discord_vc._after.channel = after_channel
         self.discord_vc.send_message()
-        assert self.discord_vc._channel.send.call_count == 3
+        assert self.discord_vc._channel_id.send.call_count == 3
 
         self.discord_vc._before.channel = None
         self.discord_vc._after.channel = None
         self.discord_vc.send_message()
-        assert self.discord_vc._channel.send.call_count == 3
+        assert self.discord_vc._channel_id.send.call_count == 3
 
 
 if __name__ == '__main__':
