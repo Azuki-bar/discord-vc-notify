@@ -26,7 +26,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
   login-ghcr:
     runs-on: ubuntu-latest
-    needs: login-hub
+    needs: docker-init
     steps:
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v1
