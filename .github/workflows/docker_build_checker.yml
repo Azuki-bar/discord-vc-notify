@@ -61,7 +61,7 @@ jobs:
           push: false
           tags: azukibar/discord-vc-notify:GITHUB_REF-GITHUB_JOB
 
-  amdv7-production-container:
+  armv7-production-container:
     runs-on: ubuntu-latest
     needs: docker-init
     steps:
