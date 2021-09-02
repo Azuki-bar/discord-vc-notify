@@ -2,7 +2,12 @@
 name: publish_docker_image_dev
 
 on:
-  push
+  push:
+    paths:
+      - '.github/workflows/**'
+      - 'codes/**'
+      - 'Dockerfiles/**'
+      - '**/Pipfile*'
 
 jobs:
   docker-init:
