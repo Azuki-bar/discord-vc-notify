@@ -12,8 +12,8 @@ class DiscordVc(DetectVoiceState):
         self._member = None
         self._message = None
         self._channel_id = channel_id
-        self._channel = None
         self._client = client
+        self._channel = self._client.get_channel(self._channel_id)
 
     @property
     def member(self) -> Type[discord.Member]:
@@ -82,4 +82,4 @@ class DiscordVc(DetectVoiceState):
         self.voice_channel_diff()
         if self._channel_status is not None:
             self._retrieve_message()
-            await self.channel.send(self.content)
+            await self._channel.send(self.content)

@@ -1,5 +1,5 @@
 import unittest
-from unittest.mock import MagicMock
+from unittest.mock import MagicMock, AsyncMock
 from ..DiscordVc import DiscordVc
 import pytest
 import discord
@@ -7,9 +7,11 @@ import discord
 
 class TestDiscordVc(unittest.TestCase):
     def setUp(self) -> None:
-        self.channel_mock = MagicMock(discord.ChannelType)
+        # self.channel_mock = MagicMock(discord.ChannelType)
         self.member_mock = MagicMock(discord.Member)
-        self.discord_vc = DiscordVc(self.channel_mock)
+        self.client_mock = MagicMock(discord.Client)
+        channel_id = 0
+        self.discord_vc = DiscordVc(self.client_mock, channel_id)
 
     def test_set_member(self):
         with pytest.raises(TypeError) as e:
@@ -61,34 +63,41 @@ class TestDiscordVc(unittest.TestCase):
         retrieve_message()
         assert self.discord_vc._message is None
 
-    def test_send_message(self):
-        self.discord_vc._channel_id.send = MagicMock(
+
+class TestSendMessage(unittest.IsolatedAsyncioTestCase):
+    def setUp(self) -> None:
+        self.client_mock = MagicMock(discord.Client)
+        channel_id = 0
+        self.discord_vc = DiscordVc(self.client_mock, channel_id)
+        self.discord_vc._channel = MagicMock(name='discord.TextChannel')
+        self.discord_vc._channel.send = AsyncMock(
             name='discord.TextChannel.send')
+
+    async def test_send_message(self):
         self.discord_vc._member = MagicMock(discord.Member)
         self.discord_vc._before = MagicMock(discord.VoiceState)
         self.discord_vc._after = MagicMock(discord.VoiceState)
         before_channel = "BEFORE_CHANNEL"
         after_channel = "AFTER_CHANNEL"
-
         self.discord_vc._before.channel = None
         self.discord_vc._after.channel = after_channel
-        self.discord_vc.send_message()
-        assert self.discord_vc._channel_id.send.call_count == 1
+        await self.discord_vc.send_message()
+        assert self.discord_vc._channel.send.call_count == 1
 
         self.discord_vc._before.channel = before_channel
         self.discord_vc._after.channel = None
-        self.discord_vc.send_message()
-        assert self.discord_vc._channel_id.send.call_count == 2
+        await self.discord_vc.send_message()
+        assert self.discord_vc._channel.send.call_count == 2
 
         self.discord_vc._before.channel = before_channel
         self.discord_vc._after.channel = after_channel
-        self.discord_vc.send_message()
-        assert self.discord_vc._channel_id.send.call_count == 3
+        await self.discord_vc.send_message()
+        assert self.discord_vc._channel.send.call_count == 3
 
         self.discord_vc._before.channel = None
         self.discord_vc._after.channel = None
-        self.discord_vc.send_message()
-        assert self.discord_vc._channel_id.send.call_count == 3
+        await self.discord_vc.send_message()
+        assert self.discord_vc._channel.send.call_count == 3
 
 
 if __name__ == '__main__':
