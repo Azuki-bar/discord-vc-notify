@@ -44,7 +44,7 @@ jobs:
           file: ./Dockerfiles/test_Dockerfile
           platforms: linux/amd64
           push: true
-          tags: ${{steps.tag.outputs.images}}
+          tags: ${{steps.tag.outputs.tags}}
 
   docker-hub-arm64:
     needs:
@@ -73,7 +73,7 @@ jobs:
           context: ./
           file: ./Dockerfiles/test_Dockerfile
           platforms: linux/arm64
-          tags: ${{steps.tag.outputs.images}}
+          tags: ${{steps.tag.outputs.tags}}
 
   docker-hub-armv7:
     needs:
@@ -102,7 +102,7 @@ jobs:
           context: ./
           file: ./Dockerfiles/test_Dockerfile
           platforms: linux/arm/v7
-          tags: ${{steps.tag.outputs.images}}
+          tags: ${{steps.tag.outputs.tags}}
 
   ghcr-amd64:
     needs:
@@ -131,7 +131,7 @@ jobs:
           file: ./Dockerfiles/test_Dockerfile
           platforms: linux/amd64
           push: true
-          tags: ${{steps.tag.outputs.images}}
+          tags: ${{steps.tag.outputs.tags}}
 
   ghcr-arm64:
     needs:
@@ -162,7 +162,7 @@ jobs:
           file: ./Dockerfiles/test_Dockerfile
           platforms: linux/arm64
           push: true
-          tags: ${{steps.tag.outputs.images}}
+          tags: ${{steps.tag.outputs.tags}}
 
   ghcr-armv7:
     needs:
@@ -193,4 +193,4 @@ jobs:
           file: ./Dockerfiles/test_Dockerfile
           platforms: linux/arm/v7
           push: true
-          tags: ${{steps.tag.outputs.images}}
+          tags: ${{steps.tag.outputs.tags}}
