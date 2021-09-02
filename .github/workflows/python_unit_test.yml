@@ -1,0 +1,17 @@
+name: unit_test
+
+on:
+  push
+
+jobs:
+  unittest:
+    runs-on: ubuntu-latest
+    name: 'Unit Test'
+    steps:
+      - name: Check Out Repo
+        uses: actions/checkout@v2
+
+      - name: run unit test container
+        run: |
+          docker buildx build -t testcontainer:$GITHUB_ACTION -f 'Dockerfiles/test_Dockerfile' .
+          docker run testcontainer:$GITHUB_ACTION

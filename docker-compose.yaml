@@ -1,7 +1,9 @@
 version: '3'
 services:
   server:
-    build: ./
+    build:
+      context: .
+      dockerfile: ./Dockerfiles/product_Dockerfile
     environment:
       TOKEN: "XXXXXXXXXX"
       CHANNEL_ID: "YYYYYYYYYY"
