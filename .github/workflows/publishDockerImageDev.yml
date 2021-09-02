@@ -199,13 +199,13 @@ jobs:
           tags: ${{steps.tag.outputs.tags}}
   comment:
     runs-on: ubuntu-latest
-#    needs:
-#      - docker-hub-amd64
-#      - docker-hub-arm64
-#      - docker-hub-armv7
-#      - ghcr-amd64
-#      - ghcr-arm64
-#      - ghcr-armv7
+    needs:
+      - docker-hub-amd64
+      - docker-hub-arm64
+      - docker-hub-armv7
+      - ghcr-amd64
+      - ghcr-arm64
+      - ghcr-armv7
     steps:
       - name: get tag
         id: tag
