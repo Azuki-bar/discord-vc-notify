@@ -7,139 +7,52 @@ on:
       - "v*"
 
 jobs:
-  detect-tags:
-    runs-on: ubuntu-latest
-    outputs:
-      tag: ${{steps.tag.outputs}}
-    steps:
-      - id: tag
-        name: Detect Tags
-        run: echo ${{ github.ref }} | sed -e "s#refs/tags/v\(.*\)#VERSION=\1#g"
-
-  login-hub:
+  docker:
+    env: 
+      VERSION: 0
     runs-on: ubuntu-latest
     steps:
-      - name: Login to DockerHub
-        uses: docker/login-action@v1
+      -
+        name: Check Out Repo 
+        uses: actions/checkout@v2
+      -
+        name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+      -
+        name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+      -
+        name: Login to DockerHub
+        uses: docker/login-action@v1 
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-  login-ghcr:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v1
+      - 
+        name: Detect Tags
+        run: echo ${{ github.ref }} | sed -e "s#refs/tags/v\(.*\)#VERSION=\1#g" >> $GITHUB_ENV
+      -
+        name: Login to GitHub Container Registry
+        uses: docker/login-action@v1 
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
-
-  push-hub-amd64:
-    needs:
-      - login-hub
-      - detect-tags
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check Out Repo
-        uses: actions/checkout@v2
-      - name: Build amd64 and push to DockerHub
+      -
+        name: Build and push to DockerHub
         uses: docker/build-push-action@v2
         with:
           context: ./
           file: ./Dockerfiles/product_Dockerfile
-          platforms: linux/amd64
+          platforms: linux/amd64, linux/arm64, linux/arm/v7
           push: true
-          tags: azukibar/discord-vc-notify:${{needs.detect-tags.outputs.tag}}
-
-  push-hub-arm64:
-    needs:
-      - login-hub
-      - detect-tags
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check Out Repo
-        uses: actions/checkout@v2
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v1
-      - name: Build arm64 and push to DockerHub
+          tags: azukibar/discord-vc-notify:${{env.VERSION}}
+      -
+        name: Build and push to GitHub Container Registry
         uses: docker/build-push-action@v2
         with:
           context: ./
-          file: ./Dockerfiles/product_Dockerfile
-          platforms: linux/arm64
+          file: ./product_Dockerfile
+          platforms: linux/amd64, linux/arm64, linux/arm/v7
           push: true
-          tags: azukibar/discord-vc-notify:${{needs.detect-tags.outputs.tag}}
+          tags: ghcr.io/azuki-bar/discord-vc-notify:${{env.VERSION}}
 
-  push-hub-armv7:
-    needs:
-      - login-hub
-      - detect-tags
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check Out Repo
-        uses: actions/checkout@v2
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v1
-      - name: Build armv7 and push to DockerHub
-        uses: docker/build-push-action@v2
-        with:
-          context: ./
-          file: ./Dockerfiles/product_Dockerfile
-          platforms: linux/arm/v7
-          push: true
-          tags: azukibar/discord-vc-notify:${{needs.detect-tags.outputs.tag}}
-
-  push-ghcr-amd64:
-    needs:
-      - login-ghcr
-      - detect-tags
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check Out Repo
-        uses: actions/checkout@v2
-      - name: Build amd64 and push to GitHub Container Registry
-        uses: docker/build-push-action@v2
-        with:
-          context: ./
-          file: ./Dockerfiles/product_Dockerfile
-          platforms: linux/amd64
-          push: true
-          tags: ghcr.io/${{ github.repository }}:${{needs.detect-tags.outputs.tag}}
-
-  push-ghcr-arm64:
-    needs:
-      - login-ghcr
-      - detect-tags
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check Out Repo
-        uses: actions/checkout@v2
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v1
-      - name: Build arm64 and push to GitHub Container Registry
-        uses: docker/build-push-action@v2
-        with:
-          context: ./
-          file: ./Dockerfiles/product_Dockerfile
-          platforms: linux/arm64
-          push: true
-          tags: ghcr.io/${{ github.repository }}:${{needs.detect-tags.outputs.tag}}
-
-  push-ghcr-armv7:
-    needs:
-      - login-ghcr
-      - detect-tags
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check Out Repo
-        uses: actions/checkout@v2
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v1
-      - name: Build arm64 and push to GitHub Container Registry
-        uses: docker/build-push-action@v2
-        with:
-          context: ./
-          file: ./Dockerfiles/product_Dockerfile
-          platforms: linux/arm/v7
-          push: true
-          tags: ghcr.io/${{ github.repository }}:${{needs.detect-tags.outputs.tag}}
