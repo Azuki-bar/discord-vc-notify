@@ -39,7 +39,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       -
         name: Build and push to DockerHub
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v5
         with:
           context: ./
           file: ./Dockerfiles/product_Dockerfile
@@ -48,7 +48,7 @@ jobs:
           tags: azukibar/discord-vc-notify:${{env.VERSION}}
       -
         name: Build and push to GitHub Container Registry
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v5
         with:
           context: ./
           file: ./product_Dockerfile
